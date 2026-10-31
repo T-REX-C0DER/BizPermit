@@ -1,29 +1,37 @@
 /**
  * BizPermit Shared Component Renderers & UI Utilities
+ * High-performance, accessible, responsive component architecture
  */
 
+// Toast Notifications
 function showToast(message, type = 'info') {
   let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');
     container.id = 'toast-container';
+    container.setAttribute('aria-live', 'polite');
+    container.setAttribute('aria-atomic', 'true');
     document.body.appendChild(container);
   }
 
   const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
+  toast.className = `toast toast-${type} fade-in-up`;
   const icon = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'info';
   toast.innerHTML = `
-    <span class="material-symbols-outlined" style="font-size: 20px;">${icon}</span>
-    <span>${message}</span>
+    <span class="material-symbols-outlined" style="font-size: 20px; flex-shrink: 0;">${icon}</span>
+    <span style="flex: 1;">${message}</span>
+    <button type="button" aria-label="Close notification" style="color: inherit; opacity: 0.7; padding: 2px;" onclick="this.parentElement.remove()">
+      <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+    </button>
   `;
 
   container.appendChild(toast);
   setTimeout(() => {
     toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s ease';
-    setTimeout(() => toast.remove(), 300);
-  }, 4000);
+    toast.style.transform = 'translate3d(0, 8px, 0)';
+    toast.style.transition = 'all var(--transition-fast)';
+    setTimeout(() => toast.remove(), 200);
+  }, 4500);
 }
 
 function formatCurrency(amount) {
@@ -86,7 +94,7 @@ function renderPublicHeader(activeLink = 'home') {
 
   header.innerHTML = `
     <div class="container">
-      <a href="/" class="brand-logo">
+      <a href="/" class="brand-logo" aria-label="BizPermit Home">
         <div class="brand-icon">
           <span class="material-symbols-outlined" style="font-size: 22px;">account_balance</span>
         </div>
@@ -95,7 +103,7 @@ function renderPublicHeader(activeLink = 'home') {
           <span class="brand-sub">Municipal Licensure</span>
         </div>
       </a>
-      <nav class="public-nav">
+      <nav class="public-nav" aria-label="Main Navigation">
         <a href="/" class="${activeLink === 'home' ? 'active' : ''}">Home</a>
         <a href="/licenses.html" class="${activeLink === 'licenses' ? 'active' : ''}">Explore Licenses</a>
         <a href="/how-it-works.html" class="${activeLink === 'how-it-works' ? 'active' : ''}">How It Works</a>
@@ -104,7 +112,7 @@ function renderPublicHeader(activeLink = 'home') {
       </nav>
       <div class="header-actions">
         ${authButtons}
-        <button class="mobile-menu-btn" onclick="toggleMobileNav()">
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation menu" aria-expanded="false">
           <span class="material-symbols-outlined">menu</span>
         </button>
       </div>
@@ -114,17 +122,13 @@ function renderPublicHeader(activeLink = 'home') {
 
 function toggleMobileNav() {
   const nav = document.querySelector('.public-nav');
+  const btn = document.querySelector('.mobile-menu-btn');
   if (nav) {
-    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-    nav.style.flexDirection = 'column';
-    nav.style.position = 'absolute';
-    nav.style.top = '80px';
-    nav.style.left = '0';
-    nav.style.right = '0';
-    nav.style.background = '#ffffff';
-    nav.style.padding = '1.5rem 2rem';
-    nav.style.borderBottom = '1px solid #e8e8ec';
-    nav.style.boxShadow = '0 10px 25px rgba(0,0,0,0.06)';
+    const isOpen = nav.classList.toggle('open');
+    if (btn) {
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      btn.innerHTML = `<span class="material-symbols-outlined">${isOpen ? 'close' : 'menu'}</span>`;
+    }
   }
 }
 
@@ -149,8 +153,8 @@ function renderPublicFooter() {
           <p style="font-size: 0.85rem; max-width: 320px; margin-bottom: 1.25rem;">
             Smart business license management system integrating 4 distinct database architectures: MySQL, MongoDB, Neo4j, and Redis.
           </p>
-          <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:#f4f4f5;font-size:0.75rem;font-weight:600;color:#52525b;">
-            <span class="material-symbols-outlined" style="font-size:14px;color:#16834a;">check_circle</span>
+          <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--color-surface);border:1px solid var(--color-border);font-size:0.75rem;font-weight:600;color:var(--color-text-secondary);">
+            <span class="material-symbols-outlined" style="font-size:14px;color:var(--color-success);">check_circle</span>
             <span>Multi-Database DBMS Verified</span>
           </div>
         </div>
@@ -188,7 +192,7 @@ function renderPublicFooter() {
 
       <div class="footer-bottom">
         <p>© 2026 BizPermit Civic Architecture. Academic DBMS Implementation with 4 Database Engines (MySQL, MongoDB, Neo4j, Redis).</p>
-        <div style="display:flex;gap:1.5rem;font-weight:600;font-size:0.75rem;">
+        <div style="display:flex;flex-wrap:wrap;gap:1.5rem;font-weight:600;font-size:0.75rem;">
           <span>MySQL 8+</span>
           <span>MongoDB 7.0+</span>
           <span>Neo4j 5.20+</span>
@@ -204,11 +208,23 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
   const sidebar = document.getElementById('dashboard-sidebar');
   if (!sidebar) return;
 
+  const ws = (workspace || 'owner').toLowerCase();
+
+  // Add mobile backdrop element if not already present
+  let backdrop = document.getElementById('sidebar-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'sidebar-backdrop';
+    backdrop.className = 'sidebar-backdrop';
+    backdrop.addEventListener('click', toggleSidebar);
+    document.body.appendChild(backdrop);
+  }
+
   const user = API.getUser() || { full_name: 'Authorized User', email: 'user@bizpermit.demo', roles: [] };
 
   let navItems = [];
 
-  if (workspace === 'owner') {
+  if (ws === 'owner') {
     navItems = [
       { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', href: '/owner/dashboard.html' },
       { id: 'businesses', label: 'My Businesses', icon: 'storefront', href: '/owner/businesses.html' },
@@ -220,14 +236,14 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
       { id: 'notifications', label: 'Notifications', icon: 'notifications', href: '/owner/notifications.html' },
       { id: 'profile', label: 'Profile & Settings', icon: 'manage_accounts', href: '/owner/profile.html' }
     ];
-  } else if (workspace === 'staff') {
+  } else if (ws === 'staff') {
     navItems = [
       { id: 'dashboard', label: 'Staff Dashboard', icon: 'dashboard', href: '/staff/dashboard.html' },
       { id: 'assigned', label: 'Assigned Applications', icon: 'inbox', href: '/staff/assigned.html' },
       { id: 'inspections', label: 'Field Inspections', icon: 'fact_check', href: '/staff/inspections.html' },
       { id: 'history', label: 'Decision History', icon: 'history', href: '/staff/history.html' }
     ];
-  } else if (workspace === 'admin') {
+  } else if (ws === 'admin') {
     navItems = [
       { id: 'dashboard', label: 'Overview', icon: 'dashboard', href: '/admin/dashboard.html' },
       { id: 'users', label: 'User Directory', icon: 'group', href: '/admin/users.html' },
@@ -253,11 +269,11 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
   sidebar.innerHTML = `
     <div class="sidebar-header">
       <a href="/" class="brand-logo">
-        <div class="brand-icon" style="width:32px;height:32px;border-radius:8px;">
+        <div class="brand-icon" style="width:34px;height:34px;border-radius:8px;">
           <span class="material-symbols-outlined" style="font-size: 18px;">account_balance</span>
         </div>
         <div class="brand-text">
-          <span class="brand-name" style="font-size:1rem;">BizPermit</span>
+          <span class="brand-name" style="font-size:1.05rem;">BizPermit</span>
           <span class="brand-sub">${workspace.toUpperCase()} PORTAL</span>
         </div>
       </a>
@@ -267,7 +283,7 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
       <span class="sidebar-label">Navigation</span>
       ${navHtml}
 
-      <span class="sidebar-label" style="margin-top:1.5rem;">Switch Workspace</span>
+      <span class="sidebar-label" style="margin-top:1.25rem;">Switch Workspace</span>
       <a href="/owner/dashboard.html" class="sidebar-link" style="font-size:0.8rem;">
         <span class="material-symbols-outlined" style="font-size:18px;">person</span>
         <span>Owner Workspace</span>
@@ -278,25 +294,36 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
       </a>
       <a href="/admin/dashboard.html" class="sidebar-link" style="font-size:0.8rem;">
         <span class="material-symbols-outlined" style="font-size:18px;">admin_panel_settings</span>
-        <span>Admin Workspace</span>
+        <span>Admin Console</span>
       </a>
     </div>
 
     <div class="sidebar-footer">
-      <div style="display:flex;align-items:center;gap:10px;overflow:hidden;">
-        <div style="width:34px;height:34px;border-radius:50%;background:#09090b;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0;">
-          ${(user.full_name || 'U').charAt(0)}
+      <div style="display:flex;align-items:center;gap:10px;overflow:hidden;flex:1;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--color-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;">
+          ${(user.full_name || 'U').charAt(0).toUpperCase()}
         </div>
         <div style="overflow:hidden;line-height:1.2;">
-          <div style="font-weight:700;font-size:0.8rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${user.full_name || 'User'}</div>
-          <div style="font-size:0.7rem;color:#71717a;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${user.email || ''}</div>
+          <div style="font-weight:700;font-size:0.825rem;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${user.full_name || 'User'}</div>
+          <div style="font-size:0.7rem;color:var(--color-muted);white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${user.email || ''}</div>
         </div>
       </div>
-      <button onclick="Auth.logout()" title="Sign Out" style="background:none;border:none;cursor:pointer;color:#71717a;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#71717a'">
+      <button onclick="Auth.logout()" title="Sign Out" style="background:none;border:none;cursor:pointer;color:var(--color-muted);padding:4px;display:flex;" onmouseover="this.style.color='var(--color-text)'" onmouseout="this.style.color='var(--color-muted)'">
         <span class="material-symbols-outlined" style="font-size:20px;">logout</span>
       </button>
     </div>
   `;
+}
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.dashboard-sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) {
+    const isOpen = sidebar.classList.toggle('open');
+    if (backdrop) {
+      backdrop.classList.toggle('active', isOpen);
+    }
+  }
 }
 
 // Render Topbar on Dashboard Pages
@@ -304,17 +331,15 @@ function renderTopbar(pageTitle = 'Dashboard') {
   const topbar = document.getElementById('dashboard-topbar');
   if (!topbar) return;
 
-  const user = API.getUser() || { full_name: 'User' };
-
   topbar.innerHTML = `
     <div class="topbar-left">
-      <button class="mobile-menu-btn" style="display:block;margin-right:0.5rem;" onclick="document.querySelector('.dashboard-sidebar').classList.toggle('open')">
+      <button class="mobile-menu-btn" style="display:flex;margin-right:0.25rem;" onclick="toggleSidebar()" aria-label="Toggle navigation drawer">
         <span class="material-symbols-outlined">menu</span>
       </button>
       <h2 style="font-size:1.35rem;font-weight:800;letter-spacing:-0.02em;">${pageTitle}</h2>
     </div>
     <div class="topbar-right">
-      <a href="/owner/notifications.html" style="position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:#f4f4f5;color:#18181b;" title="Notifications">
+      <a href="/owner/notifications.html" style="position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text);" title="Notifications" aria-label="View notifications">
         <span class="material-symbols-outlined" style="font-size:20px;">notifications</span>
       </a>
       <a href="/licenses.html" class="btn btn-secondary btn-sm" target="_blank" style="display:flex;align-items:center;gap:4px;">

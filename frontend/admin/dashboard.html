@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/theme.css">
+  <link rel="stylesheet" href="/assets/css/animations.css">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -33,19 +34,19 @@
         </div>
 
         <!-- 8-Metric Cards -->
-        <div id="metrics-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-bottom:2.5rem;">
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Total Applications</span><div id="m-total" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--state-warning);">Pending Review</span><div id="m-pending" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--state-warning);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--state-success);">Approved</span><div id="m-approved" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--state-success);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--state-error);">Rejected</span><div id="m-rejected" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--state-error);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Active Licenses</span><div id="m-licenses" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Registered Users</span><div id="m-users" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Businesses</span><div id="m-biz" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
-          <div class="card" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--accent-teal);">Approval Rate</span><div id="m-rate" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--accent-teal);margin-top:0.5rem;">—</div></div>
+        <div id="metrics-grid" class="metric-cards-grid" style="margin-bottom:2.5rem;">
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Total Applications</span><div id="m-total" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--state-warning);">Pending Review</span><div id="m-pending" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--state-warning);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--state-success);">Approved</span><div id="m-approved" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--state-success);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--state-error);">Rejected</span><div id="m-rejected" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--state-error);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Active Licenses</span><div id="m-licenses" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Registered Users</span><div id="m-users" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);">Businesses</span><div id="m-biz" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);margin-top:0.5rem;">—</div></div>
+          <div class="card card-lift" style="padding:1.5rem;"><span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--accent-teal);">Approval Rate</span><div id="m-rate" style="font-size:2.25rem;font-weight:800;font-family:var(--font-heading);color:var(--accent-teal);margin-top:0.5rem;">—</div></div>
         </div>
 
         <!-- Charts Row -->
-        <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+        <div class="charts-row-grid" style="margin-bottom:1.5rem;">
           <div class="card" style="padding:1.5rem;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
               <h2 style="font-size:0.95rem;font-weight:700;margin:0;">Monthly Application Trends</h2>
@@ -63,7 +64,7 @@
         </div>
 
         <!-- Department Workload + Recent Audit -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div class="split-grid-2">
           <div class="card">
             <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-default);display:flex;justify-content:space-between;align-items:center;">
               <h2 style="font-size:0.95rem;font-weight:700;margin:0;">Department Workload</h2>

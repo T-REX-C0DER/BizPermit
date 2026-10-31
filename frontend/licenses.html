@@ -4,56 +4,63 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>License Catalog — BizPermit</title>
+  <meta name="description" content="Explore official commercial authorizations, fee schedules, processing turnarounds, and departmental oversight frameworks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/theme.css">
+  <link rel="stylesheet" href="/assets/css/animations.css">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="stylesheet" href="/assets/css/components.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
 
   <header id="public-header" class="public-header"></header>
 
-  <main style="padding: 3.5rem 0 5rem; flex: 1;">
+  <main id="main-content" style="padding: clamp(2.5rem, 5vw, 4rem) 0 5rem; flex: 1;">
     <div class="container">
       
       <!-- Page Header -->
       <div style="margin-bottom: 2.5rem;">
-        <span style="font-family: var(--font-heading); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">
+        <span style="font-family: var(--font-heading); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted);">
           MUNICIPAL STATUTORY REGISTRY
         </span>
-        <h1 style="margin-top: 0.35rem; margin-bottom: 0.5rem; font-size: 2.5rem;">Commercial License Catalog</h1>
-        <p style="max-width: 650px;">
+        <h1 style="margin-top: 0.35rem; margin-bottom: 0.5rem;">Commercial License Catalog</h1>
+        <p class="lead" style="max-width: 650px;">
           Explore official commercial authorizations, fee schedules, processing turnarounds, and departmental oversight frameworks.
         </p>
       </div>
 
-      <!-- Filters & Search Toolbar -->
-      <div class="card" style="margin-bottom: 2.5rem; padding: 1.75rem;">
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 1rem; align-items: flex-end;" class="filters-grid">
+      <!-- Filters & Search Toolbar (Responsive Class) -->
+      <div class="card" style="margin-bottom: 2.5rem; padding: clamp(1.25rem, 2.5vw, 1.75rem);">
+        <div class="filters-grid">
           
           <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Search Query</label>
+            <label class="form-label" for="filter-search">Search Query</label>
             <div style="position: relative; display: flex; align-items: center;">
-              <span class="material-symbols-outlined" style="position: absolute; left: 12px; color: var(--text-muted); font-size: 18px;">search</span>
+              <span class="material-symbols-outlined" style="position: absolute; left: 12px; color: var(--color-muted); font-size: 18px;">search</span>
               <input type="text" id="filter-search" class="form-control" style="padding-left: 38px;" placeholder="Search by license name or code...">
             </div>
           </div>
 
           <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Business Sector</label>
+            <label class="form-label" for="filter-category">Business Sector</label>
             <select id="filter-category" class="form-select">
               <option value="">All Sectors</option>
             </select>
           </div>
 
           <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Department</label>
+            <label class="form-label" for="filter-department">Department</label>
             <select id="filter-department" class="form-select">
               <option value="">All Departments</option>
             </select>
           </div>
 
           <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label">Sort Order</label>
+            <label class="form-label" for="filter-sort">Sort Order</label>
             <select id="filter-sort" class="form-select">
               <option value="name">Name (A-Z)</option>
               <option value="fee_asc">Fee: Low to High</option>
@@ -62,11 +69,11 @@
           </div>
 
           <div style="display: flex; gap: 8px;">
-            <button onclick="applyFilters()" class="btn btn-primary">
+            <button onclick="applyFilters()" class="btn btn-primary" style="flex: 1;">
               <span class="material-symbols-outlined" style="font-size: 16px;">tune</span>
               <span>Filter</span>
             </button>
-            <button onclick="resetFilters()" class="btn btn-secondary" title="Reset Filters">
+            <button onclick="resetFilters()" class="btn btn-secondary" title="Reset Filters" style="min-width: 44px; padding: 0;">
               <span class="material-symbols-outlined" style="font-size: 16px;">refresh</span>
             </button>
           </div>
@@ -181,7 +188,7 @@
       }
 
       grid.innerHTML = licenses.map(l => `
-        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-radius: var(--radius-lg);">
+        <div class="card card-lift" style="display: flex; flex-direction: column; justify-content: space-between; border-radius: var(--radius-lg);">
           <div>
             <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 1rem;">
               <span class="badge badge-draft" style="font-family: var(--font-heading); font-weight: 700;">${l.code}</span>

@@ -5,26 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BizPermit — Smart Business License Management System</title>
   <meta name="description" content="Discover statutory license requirements, complete digital filings, track verification in real time, and oversee renewals in a single authoritative portal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/theme.css">
+  <link rel="stylesheet" href="/assets/css/animations.css">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="stylesheet" href="/assets/css/components.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
 
   <!-- PUBLIC HEADER -->
   <header id="public-header" class="public-header"></header>
 
-  <main>
+  <main id="main-content">
     <!-- HERO SECTION -->
-    <section style="padding: 5rem 0 6rem; border-bottom: 1px solid var(--border-light); position: relative; overflow: hidden;">
+    <section style="padding: clamp(3.5rem, 6vw, 6rem) 0; border-bottom: 1px solid var(--color-border-light); position: relative; overflow: hidden;">
       <div class="container">
-        <div style="display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center;" class="hero-grid">
-          <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <div class="hero-grid">
+          <div style="max-width: 820px; margin: 0 auto; text-align: center;">
             
             <!-- Civic Initiative Pill -->
-            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: var(--radius-full); border: 1px solid var(--border-default); background-color: var(--bg-secondary); margin-bottom: 2rem;">
-              <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--bg-obsidian);"></span>
-              <span style="font-family: var(--font-heading); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-primary);">
+            <div class="hero-pill">
+              <span class="pulse-mint-dot"></span>
+              <span style="font-family: var(--font-heading); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text);">
                 MUNICIPAL DIGITAL COMMERCE INITIATIVE
               </span>
             </div>
@@ -32,38 +38,38 @@
             <!-- Main Headline -->
             <h1 style="margin-bottom: 1.5rem;">
               Start Your Business.<br>
-              We’ll Help You <span style="font-weight: 300; font-style: italic; color: var(--text-secondary); text-decoration: underline; text-decoration-color: #d4d4d8; text-underline-offset: 8px;">Get Licensed.</span>
+              We’ll Help You <span style="font-weight: 300; font-style: italic; color: var(--color-text-secondary); text-decoration: underline; text-decoration-color: #d4d4d8; text-underline-offset: 8px;">Get Licensed.</span>
             </h1>
 
             <!-- Subheading -->
-            <p style="font-size: 1.15rem; line-height: 1.7; max-width: 650px; margin: 0 auto 2.5rem; color: var(--text-secondary);">
+            <p class="lead" style="max-width: 650px; margin: 0 auto 2.5rem;">
               Discover statutory license requirements, complete digital filings, track verification in real time, and oversee renewals in a single authoritative portal.
             </p>
 
             <!-- Action CTAs -->
             <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 3rem;">
-              <a href="/licenses.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+              <a href="/licenses.html" class="btn btn-primary btn-lg">
                 <span>Explore Licenses</span>
                 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
               </a>
               <a href="/how-it-works.html" class="btn btn-secondary btn-lg">
-                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--text-secondary);">play_circle</span>
+                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--color-text-secondary);">play_circle</span>
                 <span>How It Works</span>
               </a>
             </div>
 
             <!-- Trust Signals -->
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
-              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">
-                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent-teal);">verified</span>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border-light);">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--color-text);">
+                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--color-teal);">verified</span>
                 <span>Direct Statutory Filing</span>
               </div>
-              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">
-                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent-teal);">speed</span>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--color-text);">
+                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--color-teal);">speed</span>
                 <span>Audited SLAs</span>
               </div>
-              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">
-                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--accent-teal);">lock</span>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: var(--color-text);">
+                <span class="material-symbols-outlined" style="font-size: 18px; color: var(--color-teal);">lock</span>
                 <span>Encrypted Vault</span>
               </div>
             </div>
@@ -74,28 +80,28 @@
     </section>
 
     <!-- QUICK LICENSE DISCOVERY & SEARCH BAR -->
-    <section id="search-section" style="padding: 4.5rem 0; background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-default);">
+    <section id="search-section" style="padding: 4rem 0; background-color: var(--color-surface); border-bottom: 1px solid var(--color-border);">
       <div class="container">
-        <div style="background-color: #ffffff; border-radius: var(--radius-xl); padding: 2.5rem; border: 1px solid var(--border-default); box-shadow: var(--shadow-card);">
+        <div style="background-color: var(--color-background); border-radius: var(--radius-xl); padding: clamp(1.5rem, 3vw, 2.5rem); border: 1px solid var(--color-border); box-shadow: var(--shadow-card);">
           
-          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-border-light); margin-bottom: 1.5rem;">
             <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-primary);">manage_search</span>
+              <span class="material-symbols-outlined" style="font-size: 24px; color: var(--color-text);">manage_search</span>
               <h2 style="font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;">Civic Licensure Database Registry</h2>
             </div>
-            <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Search certified municipal commercial frameworks</span>
+            <span style="font-size: 0.8rem; color: var(--color-muted); font-weight: 500;">Search certified municipal commercial frameworks</span>
           </div>
 
-          <!-- Working Search Form -->
-          <form id="license-search-form" style="display: grid; grid-template-columns: 2fr 1.2fr auto; gap: 1rem; align-items: center;" onsubmit="handleSearch(event)">
+          <!-- Working Search Form (Responsive Grid) -->
+          <form id="license-search-form" class="search-form-grid" onsubmit="handleSearch(event)">
             <div style="position: relative; display: flex; align-items: center;">
-              <span class="material-symbols-outlined" style="position: absolute; left: 14px; color: var(--text-muted); font-size: 20px;">search</span>
-              <input id="search-query" type="text" class="form-control" style="padding-left: 42px; border-radius: var(--radius-md);" placeholder="Search licenses, commercial activities, or municipal codes...">
+              <span class="material-symbols-outlined" style="position: absolute; left: 14px; color: var(--color-muted); font-size: 20px;">search</span>
+              <input id="search-query" type="text" class="form-control" style="padding-left: 42px;" placeholder="Search licenses, commercial activities, or municipal codes..." aria-label="Search licenses">
             </div>
 
             <div style="position: relative; display: flex; align-items: center;">
-              <span class="material-symbols-outlined" style="position: absolute; left: 14px; color: var(--text-muted); font-size: 20px;">domain</span>
-              <select id="search-category" class="form-select" style="padding-left: 42px; border-radius: var(--radius-md);">
+              <span class="material-symbols-outlined" style="position: absolute; left: 14px; color: var(--color-muted); font-size: 20px;">domain</span>
+              <select id="search-category" class="form-select" style="padding-left: 42px;" aria-label="Filter by sector">
                 <option value="">All Commercial Sectors</option>
                 <option value="1">Retail Outlets &amp; Commercial Trade</option>
                 <option value="2">Food Establishments &amp; Hospitality</option>
@@ -106,7 +112,7 @@
               </select>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.75rem; border-radius: var(--radius-md);">
+            <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.75rem;">
               <span>Find Requirements</span>
               <span class="material-symbols-outlined" style="font-size: 16px;">east</span>
             </button>
@@ -157,74 +163,74 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+        <div class="metric-cards-grid">
           <!-- Pillar 1 -->
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/licenses.html'">
+          <div class="card card-lift" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/licenses.html'">
             <div>
-              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-default); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-primary);">travel_explore</span>
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--color-text);">travel_explore</span>
               </div>
-              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">PILLAR 01</span>
+              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted);">PILLAR 01</span>
               <h3 style="font-size: 1.25rem; margin-top: 0.35rem; margin-bottom: 0.75rem;">Explore Licenses</h3>
               <p style="font-size: 0.85rem; line-height: 1.6;">
                 Exhaustive statutory catalog detailing certified prerequisites, municipal fee structures, and guaranteed turnaround SLAs.
               </p>
             </div>
-            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
               <span>Query Catalog</span>
               <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
             </div>
           </div>
 
           <!-- Pillar 2 -->
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/owner/apply.html'">
+          <div class="card card-lift" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/owner/apply.html'">
             <div>
-              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-default); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-primary);">assignment_turned_in</span>
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--color-text);">assignment_turned_in</span>
               </div>
-              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">PILLAR 02</span>
+              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted);">PILLAR 02</span>
               <h3 style="font-size: 1.25rem; margin-top: 0.35rem; margin-bottom: 0.75rem;">Apply Online</h3>
               <p style="font-size: 0.85rem; line-height: 1.6;">
                 Pre-validated smart filings that flag clerical omissions immediately, paired with instant municipal fiscal treasury receipts.
               </p>
             </div>
-            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
               <span>Launch Filing</span>
               <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
             </div>
           </div>
 
           <!-- Pillar 3 -->
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/owner/applications.html'">
+          <div class="card card-lift" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/owner/applications.html'">
             <div>
-              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-default); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-primary);">radar</span>
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--color-text);">radar</span>
               </div>
-              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">PILLAR 03</span>
+              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted);">PILLAR 03</span>
               <h3 style="font-size: 1.25rem; margin-top: 0.35rem; margin-bottom: 0.75rem;">Track Applications</h3>
               <p style="font-size: 0.85rem; line-height: 1.6;">
                 Live ledger tracking municipal inspection checkpoints, field officer timestamps, and statutory approval milestones.
               </p>
             </div>
-            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
               <span>Status Portal</span>
               <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
             </div>
           </div>
 
           <!-- Pillar 4 -->
-          <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/owner/licenses.html'">
+          <div class="card card-lift" style="display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;" onclick="window.location.href='/owner/licenses.html'">
             <div>
-              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-default); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-primary);">published_with_changes</span>
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--color-surface); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                <span class="material-symbols-outlined" style="font-size: 24px; color: var(--color-text);">published_with_changes</span>
               </div>
-              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">PILLAR 04</span>
+              <span style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted);">PILLAR 04</span>
               <h3 style="font-size: 1.25rem; margin-top: 0.35rem; margin-bottom: 0.75rem;">Manage Renewals</h3>
               <p style="font-size: 0.85rem; line-height: 1.6;">
                 Proactive 90-day early notification cycles, seamless single-click re-attestations, and zero downtime compliance safeguards.
               </p>
             </div>
-            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border-light); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 700;">
               <span>Renewal Hub</span>
               <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
             </div>
