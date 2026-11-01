@@ -32,10 +32,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- admin@bizpermit.demo     => Admin@1234
 
 INSERT INTO users (id, full_name, email, phone, password_hash, is_active, created_at) VALUES
-(1, 'Marcus Vance', 'owner@bizpermit.demo', '+1 (555) 234-5678', '$2a$10$zdkdRc4p3BD4nCbSYqjokOHBKMoluWlMQ36hRjdUW6XIoB8BEXDHO', TRUE, NOW()),
-(2, 'Sarah Jenkins', 'officer@bizpermit.demo', '+1 (555) 345-6789', '$2a$10$Oz02bHVYK4xvy18nNTDvgOoPGvu.thD0IFxBl9nHlK3kqcxMWXW0K', TRUE, NOW()),
-(3, 'David Thorne', 'inspector@bizpermit.demo', '+1 (555) 456-7890', '$2a$10$XHrCM4clgWigd180Aa/3texxNa607k7jg.p5KdaYeKA81QeBszh.q', TRUE, NOW()),
-(4, 'Eleanor Vance', 'admin@bizpermit.demo', '+1 (555) 567-8901', '$2a$10$ExiIe6xrZqp2b5XYkNSxW.Z09Z5tAddIXWsEP978NZf.hI4eIumuq', TRUE, NOW());
+(1, 'Rajesh Sharma', 'owner@bizpermit.demo', '+91 98201 12345', '$2a$10$zdkdRc4p3BD4nCbSYqjokOHBKMoluWlMQ36hRjdUW6XIoB8BEXDHO', TRUE, NOW()),
+(2, 'Ananya Iyer', 'officer@bizpermit.demo', '+91 98202 23456', '$2a$10$Oz02bHVYK4xvy18nNTDvgOoPGvu.thD0IFxBl9nHlK3kqcxMWXW0K', TRUE, NOW()),
+(3, 'Vikram Malhotra', 'inspector@bizpermit.demo', '+91 98203 34567', '$2a$10$XHrCM4clgWigd180Aa/3texxNa607k7jg.p5KdaYeKA81QeBszh.q', TRUE, NOW()),
+(4, 'Sunita Deshmukh', 'admin@bizpermit.demo', '+91 98204 45678', '$2a$10$ExiIe6xrZqp2b5XYkNSxW.Z09Z5tAddIXWsEP978NZf.hI4eIumuq', TRUE, NOW());
 
 -- 2. User Roles
 INSERT INTO user_roles (user_id, role) VALUES
@@ -56,11 +56,11 @@ INSERT INTO business_categories (id, code, name, description, icon, is_active) V
 
 -- 4. Departments
 INSERT INTO departments (id, code, name, contact_email, contact_phone, office_location, is_active) VALUES
-(1, 'DCR', 'Dept. of Commercial Regulations & Consumer Affairs', 'dcr@municipal.gov.demo', '+1 (555) 100-2001', 'Civic Center Wing B, Suite 200', TRUE),
-(2, 'DPH', 'Dept. of Public Health & Food Sanitation', 'dph@municipal.gov.demo', '+1 (555) 100-2002', 'Health Services Complex, Floor 3', TRUE),
-(3, 'FSB', 'Municipal Fire & Life Safety Bureau', 'fireprevention@municipal.gov.demo', '+1 (555) 100-2003', 'Emergency Services HQ, Station 1', TRUE),
-(4, 'BMZ', 'Building & Municipal Zoning Bureau', 'zoning@municipal.gov.demo', '+1 (555) 100-2004', 'City Hall, Annex 4', TRUE),
-(5, 'EPW', 'Environmental Protection & Waste Governance', 'epw@municipal.gov.demo', '+1 (555) 100-2005', 'Civic Ecological Complex, Building C', TRUE);
+(1, 'DCR', 'Dept. of Commercial Regulations & Trade Licensure', 'trade.licensing@municipal.gov.in.demo', '+91 (080) 2297-5001', 'Mahanagar Palika Bhavan, Wing B, 2nd Floor', TRUE),
+(2, 'DPH', 'Directorate of Food Safety & Public Health', 'foodsafety@municipal.gov.in.demo', '+91 (080) 2297-5002', 'Public Health Directorate, Mayo Complex', TRUE),
+(3, 'FSB', 'Fire & Emergency Services Bureau', 'firesafety@municipal.gov.in.demo', '+91 (080) 2297-5003', 'State Fire Headquarters, Station Road', TRUE),
+(4, 'BMZ', 'Town Planning & Municipal Zoning Bureau', 'townplanning@municipal.gov.in.demo', '+91 (080) 2297-5004', 'Civic Centre Annex, Room 104', TRUE),
+(5, 'EPW', 'State Pollution Control & Waste Governance Board', 'pollutioncontrol@municipal.gov.in.demo', '+91 (080) 2297-5005', 'Paryavaran Bhavan, Kasturba Road', TRUE);
 
 -- 5. Staff Departments
 INSERT INTO staff_departments (user_id, department_id, designation, is_head) VALUES
@@ -72,13 +72,13 @@ INSERT INTO staff_departments (user_id, department_id, designation, is_head) VAL
 
 -- 6. License Types
 INSERT INTO license_types (id, code, name, department_id, fee, validity_months, processing_sla_days, requires_inspection, description, eligibility_criteria, is_active) VALUES
-(1, 'LIC-TRD-001', 'General Commercial Trade License', 1, 250.00, 12, 5, FALSE, 'Mandatory baseline municipal trade credential authorizing lawful commercial operation within the municipal boundaries.', 'Commercial lease or ownership title, verified business registration, tax compliance declaration.', TRUE),
-(2, 'LIC-FOD-002', 'Commercial Food Service & Sanitation Permit', 2, 450.00, 12, 10, TRUE, 'Health authority certification ensuring food safety standards, hygienic preparation facilities, and kitchen plumbing conformity.', 'Commercial kitchen layout plan, certified food handler certificates, grease trap verification.', TRUE),
-(3, 'LIC-FIR-003', 'Municipal Fire Safety & Occupancy Certificate', 3, 350.00, 12, 7, TRUE, 'Statutory fire prevention certificate validating emergency egress, fire suppression equipment, and structural occupancy limits.', 'Architectural floor plan with emergency exits, extinguisher maintenance certificates, smoke alarm test log.', TRUE),
-(4, 'LIC-IND-004', 'Light Industrial & Manufacturing Operating Permit', 4, 800.00, 24, 14, TRUE, 'Zoning and structural authorization for industrial machinery, production operations, and assembly floor installations.', 'Zoning clearance certificate, noise impact mitigation plan, machinery layout, electrical safety audit.', TRUE),
-(5, 'LIC-MED-005', 'Clinical Pharmacy & Medical Facility License', 2, 600.00, 12, 10, TRUE, 'Supervised regulatory permit for dispensing pharmaceuticals, outpatient clinic operation, and sterile equipment storage.', 'Registered pharmacist credential, clinical waste disposal protocol, cold storage equipment calibration.', TRUE),
-(6, 'LIC-ENV-006', 'Hazardous Materials & Environmental Clearance', 5, 500.00, 12, 14, TRUE, 'Environmental oversight clearance ensuring responsible handling of commercial chemical effluent, emission limits, and recycling.', 'Chemical inventory manifest, spill response contingency protocol, certified hazardous waste haulage contract.', TRUE),
-(7, 'LIC-LOG-007', 'Commercial Freight & Fleet Operating Permit', 1, 400.00, 12, 5, FALSE, 'Municipal logistics authorization permitting commercial vehicles, depot staging, and cross-district parcel freight dispatch.', 'Vehicle registration schedules, depot off-street parking validation, commercial driver operator records.', TRUE);
+(1, 'LIC-TRD-001', 'General Commercial Trade License', 1, 2500.00, 12, 5, FALSE, 'Mandatory baseline municipal trade credential authorizing lawful commercial operation within the municipal boundaries.', 'Commercial lease or ownership title deed, verified business registration, municipal tax clearance.', TRUE),
+(2, 'LIC-FOD-002', 'Commercial Food Service & Sanitation Permit', 2, 4500.00, 12, 10, TRUE, 'Health authority certification ensuring food safety standards, hygienic preparation facilities, and kitchen plumbing conformity.', 'Commercial kitchen layout plan, certified food handler certificates, potable water quality report.', TRUE),
+(3, 'LIC-FIR-003', 'Municipal Fire Safety & Occupancy Certificate', 3, 3500.00, 12, 7, TRUE, 'Statutory fire prevention certificate validating emergency egress, fire suppression equipment, and structural occupancy limits.', 'Architectural floor plan with emergency exits, extinguisher maintenance certificates, smoke alarm test log.', TRUE),
+(4, 'LIC-IND-004', 'Light Industrial & Manufacturing Operating Permit', 4, 15000.00, 24, 14, TRUE, 'Zoning and structural authorization for industrial machinery, production operations, and assembly floor installations.', 'Zoning clearance certificate, noise impact study, machinery specifications, electrical safety audit.', TRUE),
+(5, 'LIC-MED-005', 'Clinical Pharmacy & Medical Facility License', 2, 7500.00, 12, 10, TRUE, 'Supervised regulatory permit for dispensing pharmaceuticals, outpatient clinic operation, and sterile equipment storage.', 'Registered pharmacist degree and council license, clinical biohazard waste disposal contract.', TRUE),
+(6, 'LIC-ENV-006', 'Hazardous Materials & Environmental Clearance', 5, 8000.00, 12, 14, TRUE, 'Environmental oversight clearance ensuring responsible handling of commercial chemical effluent, emission limits, and recycling.', 'Chemical inventory manifest, spill response contingency protocol, certified hazardous waste haulage contract.', TRUE),
+(7, 'LIC-LOG-007', 'Commercial Freight & Fleet Operating Permit', 1, 5000.00, 12, 5, FALSE, 'Municipal logistics authorization permitting commercial vehicles, depot staging, and cross-district parcel freight dispatch.', 'Fleet vehicle registrations and comprehensive insurance, depot off-street parking validation.', TRUE);
 
 -- 7. License Type Categories (M:N)
 INSERT INTO license_type_categories (license_type_id, category_id) VALUES
@@ -129,11 +129,11 @@ INSERT INTO license_requirements (id, license_type_id, requirement_code, title, 
 -- Requirements for Freight & Fleet (7)
 (14, 7, 'REQ-FLEET-LIST', 'Fleet Vehicle Registrations & Insurance', 'Copies of commercial vehicle registrations and comprehensive insurance.', 'FLEET_SCHEDULE', TRUE, 'pdf');
 
--- 9. Businesses (Owned by Marcus Vance, user_id = 1)
+-- 9. Businesses (Owned by Rajesh Sharma, user_id = 1)
 INSERT INTO businesses (id, owner_id, category_id, business_name, registration_number, address_line1, address_line2, city, state, postal_code, contact_email, contact_phone, description) VALUES
-(1, 1, 2, 'Hearthstone Coffee Roasters', 'REG-2025-9941', '404 Grand Avenue', 'Suite 101', 'Civic Metro', 'Metropolitan State', '10001', 'info@hearthstoneroasters.demo', '+1 (555) 789-0123', 'Artisanal coffee roastery, espresso cafe, and wholesale bean dispatch.'),
-(2, 1, 1, 'Apex Modern Goods', 'REG-2025-3312', '128 High Street', 'Shop 4', 'Civic Metro', 'Metropolitan State', '10002', 'contact@apexmoderngoods.demo', '+1 (555) 789-0124', 'Designer home furnishing, lifestyle accessories, and curated consumer retail.'),
-(3, 1, 4, 'Horizon Biotech Lab & Clinic', 'REG-2025-7788', '89 Innovation Boulevard', 'Floor 2', 'Civic Metro', 'Metropolitan State', '10003', 'operations@horizonbiotech.demo', '+1 (555) 789-0125', 'Clinical diagnostic lab and outpatient wellness screening facility.');
+(1, 1, 2, 'Chai & Co. Artisanal Roastery', 'U74999KA2024PTC184491', '404 80 Feet Road, 4th Block', 'Koramangala', 'Bengaluru', 'Karnataka', '560034', 'namaste@chaiandroasters.in.demo', '+91 98201 12345', 'Specialty coffee and chai roastery, cafe dining, and wholesale packaged bean dispatch.'),
+(2, 1, 1, 'Swastik Modern Goods & Trade', 'U52100MH2023PTC398211', '128 Hill Road, Shop 4', 'Bandra West', 'Mumbai', 'Maharashtra', '400050', 'contact@swastikgoods.in.demo', '+91 98201 12346', 'Designer home furnishing, lifestyle accessories, and retail consumer goods.'),
+(3, 1, 4, 'Apex Diagnostics & Clinical Lab', 'U85110DL2022PTC401923', '89 Barakhamba Road, Floor 2', 'Connaught Place', 'New Delhi', 'Delhi', '110001', 'operations@apexclinical.in.demo', '+91 98201 12347', 'Clinical pathology diagnostic laboratory, certified pharmacy, and outpatient wellness screening.');
 
 -- 10. Applications
 INSERT INTO applications (id, application_number, business_id, license_type_id, owner_id, application_type, parent_license_id, status, submission_date, reviewed_by, reviewed_at, decision_remarks, created_at) VALUES
@@ -168,13 +168,13 @@ INSERT INTO application_status_history (application_id, from_status, to_status, 
 
 (5, 'DRAFT', 'SUBMITTED', 1, 'Application submitted and fees processed.', DATE_SUB(NOW(), INTERVAL 1 DAY));
 
--- 13. Application Payments (Simulated)
+-- 13. Application Payments (Simulated in INR)
 INSERT INTO application_payments (id, application_id, amount, transaction_reference, payment_method, payment_status, paid_at) VALUES
-(1, 1, 250.00, 'TXN-MUNI-2026-9001', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 20 DAY)),
-(2, 2, 450.00, 'TXN-MUNI-2026-9002', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 5 DAY)),
-(3, 3, 350.00, 'TXN-MUNI-2026-9003', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 10 DAY)),
-(4, 4, 250.00, 'TXN-MUNI-2026-9004', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 4 DAY)),
-(5, 5, 600.00, 'TXN-MUNI-2026-9005', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 1 DAY));
+(1, 1, 2500.00, 'TXN-IN-2026-9001', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 20 DAY)),
+(2, 2, 4500.00, 'TXN-IN-2026-9002', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(3, 3, 3500.00, 'TXN-IN-2026-9003', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 10 DAY)),
+(4, 4, 2500.00, 'TXN-IN-2026-9004', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 4 DAY)),
+(5, 5, 7500.00, 'TXN-IN-2026-9005', 'SIMULATED_TREASURY_TRANSFER', 'SUCCESSFUL', DATE_SUB(NOW(), INTERVAL 1 DAY));
 
 -- 14. Inspections
 INSERT INTO inspections (id, application_id, inspector_id, scheduled_date, completed_date, outcome, summary_notes, created_at) VALUES
@@ -187,13 +187,13 @@ INSERT INTO issued_licenses (id, license_number, application_id, business_id, li
 -- 16. Notifications
 INSERT INTO notifications (user_id, title, message, notification_type, link_url, is_read, created_at) VALUES
 (1, 'License Issued: LIC-2026-8841', 'Congratulations! Your General Commercial Trade License has been issued. You can now download your digital certificate.', 'SUCCESS', '/owner/license-certificate.html?id=1', FALSE, DATE_SUB(NOW(), INTERVAL 18 DAY)),
-(1, 'Fire Safety Inspection Scheduled', 'An on-site inspection for Application APP-2026-0003 has been scheduled with Inspector David Thorne.', 'INFO', '/owner/application-details.html?id=3', FALSE, DATE_SUB(NOW(), INTERVAL 7 DAY)),
+(1, 'Fire Safety Inspection Scheduled', 'An on-site inspection for Application APP-2026-0003 has been scheduled with Inspector Vikram Malhotra.', 'INFO', '/owner/application-details.html?id=3', FALSE, DATE_SUB(NOW(), INTERVAL 7 DAY)),
 (1, 'Action Required: Document Correction', 'Application APP-2026-0004 requires correction: Upload complete executed lease with landlord signature page.', 'WARNING', '/owner/application-details.html?id=4', FALSE, DATE_SUB(NOW(), INTERVAL 2 DAY)),
 (2, 'New Application Intake: APP-2026-0005', 'A new Clinical Pharmacy & Medical Facility License filing has been received for review.', 'INFO', '/staff/review.html?id=5', FALSE, DATE_SUB(NOW(), INTERVAL 1 DAY));
 
 -- 17. Audit Logs
 INSERT INTO audit_logs (user_id, action, entity_type, entity_id, details, ip_address, created_at) VALUES
-(1, 'CREATE_BUSINESS', 'BUSINESS', '1', '{"name": "Hearthstone Coffee Roasters", "category": "FOOD_HOSPITALITY"}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 26 DAY)),
-(1, 'SUBMIT_APPLICATION', 'APPLICATION', '1', '{"applicationNumber": "APP-2026-0001", "fee": 250.00}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 20 DAY)),
-(2, 'APPROVE_APPLICATION', 'APPLICATION', '1', '{"decision": "APPROVED", "remarks": "Compliant"}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 18 DAY)),
+(1, 'CREATE_BUSINESS', 'BUSINESS', '1', '{"name": "Chai & Co. Artisanal Roastery", "category": "FOOD_HOSPITALITY"}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 26 DAY)),
+(1, 'SUBMIT_APPLICATION', 'APPLICATION', '1', '{"applicationNumber": "APP-2026-0001", "fee": 2500.00}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 20 DAY)),
+(2, 'APPROVE_APPLICATION', 'APPLICATION', '1', '{"decision": "APPROVED", "remarks": "Compliant with Municipal Codes"}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 18 DAY)),
 (2, 'ISSUE_LICENSE', 'ISSUED_LICENSE', '1', '{"licenseNumber": "LIC-2026-8841"}', '127.0.0.1', DATE_SUB(NOW(), INTERVAL 18 DAY));

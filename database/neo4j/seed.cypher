@@ -21,13 +21,13 @@ CREATE (d4:Department {id: 4, code: 'BMZ', name: 'Building & Municipal Zoning Bu
 CREATE (d5:Department {id: 5, code: 'EPW', name: 'Environmental Protection & Waste Governance'})
 
 // 3. License Types
-CREATE (l1:LicenseType {id: 1, code: 'LIC-TRD-001', name: 'General Commercial Trade License', fee: 250.0, validityMonths: 12, requiresInspection: false})
-CREATE (l2:LicenseType {id: 2, code: 'LIC-FOD-002', name: 'Commercial Food Service & Sanitation Permit', fee: 450.0, validityMonths: 12, requiresInspection: true})
-CREATE (l3:LicenseType {id: 3, code: 'LIC-FIR-003', name: 'Municipal Fire Safety & Occupancy Certificate', fee: 350.0, validityMonths: 12, requiresInspection: true})
-CREATE (l4:LicenseType {id: 4, code: 'LIC-IND-004', name: 'Light Industrial & Manufacturing Operating Permit', fee: 800.0, validityMonths: 24, requiresInspection: true})
-CREATE (l5:LicenseType {id: 5, code: 'LIC-MED-005', name: 'Clinical Pharmacy & Medical Facility License', fee: 600.0, validityMonths: 12, requiresInspection: true})
-CREATE (l6:LicenseType {id: 6, code: 'LIC-ENV-006', name: 'Hazardous Materials & Environmental Clearance', fee: 500.0, validityMonths: 12, requiresInspection: true})
-CREATE (l7:LicenseType {id: 7, code: 'LIC-LOG-007', name: 'Commercial Freight & Fleet Operating Permit', fee: 400.0, validityMonths: 12, requiresInspection: false})
+CREATE (l1:LicenseType {id: 1, code: 'LIC-TRD-001', name: 'General Commercial Trade License', fee: 2500.0, validityMonths: 12, requiresInspection: false})
+CREATE (l2:LicenseType {id: 2, code: 'LIC-FOD-002', name: 'Commercial Food Service & Sanitation Permit', fee: 4500.0, validityMonths: 12, requiresInspection: true})
+CREATE (l3:LicenseType {id: 3, code: 'LIC-FIR-003', name: 'Municipal Fire Safety & Occupancy Certificate', fee: 3500.0, validityMonths: 12, requiresInspection: true})
+CREATE (l4:LicenseType {id: 4, code: 'LIC-IND-004', name: 'Light Industrial & Manufacturing Operating Permit', fee: 15000.0, validityMonths: 24, requiresInspection: true})
+CREATE (l5:LicenseType {id: 5, code: 'LIC-MED-005', name: 'Clinical Pharmacy & Medical Facility License', fee: 7500.0, validityMonths: 12, requiresInspection: true})
+CREATE (l6:LicenseType {id: 6, code: 'LIC-ENV-006', name: 'Hazardous Materials & Environmental Clearance', fee: 8000.0, validityMonths: 12, requiresInspection: true})
+CREATE (l7:LicenseType {id: 7, code: 'LIC-LOG-007', name: 'Commercial Freight & Fleet Operating Permit', fee: 5000.0, validityMonths: 12, requiresInspection: false})
 
 // 4. Document Types
 CREATE (doc1:DocumentType {code: 'LEASE_AGREEMENT', name: 'Premises Lease Agreement or Title Deed'})

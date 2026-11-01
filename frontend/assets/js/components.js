@@ -35,13 +35,25 @@ function showToast(message, type = 'info') {
 }
 
 function formatCurrency(amount) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount || 0);
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount || 0);
+}
+
+function formatINR(amount) {
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount || 0);
 }
 
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'Asia/Kolkata' });
+}
+
+function formatDateTime(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' });
 }
 
 function formatStatusBadge(status) {
@@ -221,6 +233,9 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
   }
 
   const user = API.getUser() || { full_name: 'Authorized User', email: 'user@bizpermit.demo', roles: [] };
+  const userRoles = Array.isArray(user.roles) ? user.roles : [];
+  const showStaff = userRoles.some(r => ['OFFICER', 'INSPECTOR', 'ADMIN'].includes(r));
+  const showAdmin = userRoles.includes('ADMIN');
 
   let navItems = [];
 
@@ -288,14 +303,14 @@ function renderSidebar(activeItem = 'dashboard', workspace = 'owner') {
         <span class="material-symbols-outlined" style="font-size:18px;">person</span>
         <span>Owner Workspace</span>
       </a>
-      <a href="/staff/dashboard.html" class="sidebar-link" style="font-size:0.8rem;">
+      ${showStaff ? `<a href="/staff/dashboard.html" class="sidebar-link" style="font-size:0.8rem;">
         <span class="material-symbols-outlined" style="font-size:18px;">supervisor_account</span>
         <span>Staff Workspace</span>
-      </a>
-      <a href="/admin/dashboard.html" class="sidebar-link" style="font-size:0.8rem;">
+      </a>` : ''}
+      ${showAdmin ? `<a href="/admin/dashboard.html" class="sidebar-link" style="font-size:0.8rem;">
         <span class="material-symbols-outlined" style="font-size:18px;">admin_panel_settings</span>
         <span>Admin Console</span>
-      </a>
+      </a>` : ''}
     </div>
 
     <div class="sidebar-footer">

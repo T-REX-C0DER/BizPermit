@@ -142,15 +142,125 @@ class ApplicationService {
     return doc;
   }
 
-  async getDocuments(appId) {
+  async getDocuments(appId, user = null) {
+    if (user) {
+      const app = await appRepo.findById(appId);
+      if (!app) {
+        const err = new Error('Application not found.');
+        err.statusCode = 404;
+        throw err;
+      }
+      const isOwner = app.owner_id === user.id;
+      const isStaffOrAdmin = user.roles.some(r => ['OFFICER', 'INSPECTOR', 'ADMIN'].includes(r));
+      if (!isOwner && !isStaffOrAdmin) {
+        const err = new Error('Access denied. You do not have permission to view documents for this application.');
+        err.statusCode = 403;
+        throw err;
+      }
+    }
     return await ApplicationDocument.find({ applicationId: appId });
   }
 
-  async deleteDocument(docId, userId) {
+  async getMyDocumentVault(userId) {
+    const docs = await ApplicationDocument.find({ uploadedBy: userId }).sort({ uploadedAt: -1 }).lean();
+
+    // Collect distinct application IDs
+    const appIds = [...new Set(docs.map(d => d.applicationId).filter(Boolean))];
+    let appMap = {};
+
+    if (appIds.length > 0) {
+      const mysql = require('../config/mysql');
+      const placeholders = appIds.map(() => '?').join(',');
+      const rows = await mysql.query(
+        `SELECT a.id, a.application_number, lt.name AS license_name, b.business_name
+         FROM applications a
+         JOIN license_types lt ON a.license_type_id = lt.id
+         JOIN businesses b ON a.business_id = b.id
+         WHERE a.id IN (${placeholders})`,
+        appIds
+      );
+      rows.forEach(r => {
+        appMap[r.id] = r;
+      });
+    }
+
+    const enrichedDocs = docs.map(d => {
+      const app = appMap[d.applicationId] || {};
+      return {
+        ...d,
+        id: d._id,
+        applicationNumber: app.application_number || (d.applicationId ? `APP-${d.applicationId}` : 'General Vault'),
+        licenseTypeName: app.license_name || 'Supporting Credential',
+        businessName: app.business_name || 'Business Entity'
+      };
+    });
+
+    const stats = {
+      total: enrichedDocs.length,
+      verified: enrichedDocs.filter(d => d.verificationStatus === 'VERIFIED').length,
+      pending: enrichedDocs.filter(d => d.verificationStatus === 'PENDING').length,
+      rejected: enrichedDocs.filter(d => d.verificationStatus === 'REJECTED').length
+    };
+
+    return { documents: enrichedDocs, stats };
+  }
+
+  async uploadVaultDocument(file, category, applicationId, userId) {
+    let resolvedAppId = applicationId ? parseInt(applicationId, 10) : 0;
+    if (resolvedAppId) {
+      const app = await appRepo.findById(resolvedAppId);
+      if (!app || app.owner_id !== userId) {
+        resolvedAppId = 0;
+      }
+    }
+
+    const fileBuffer = fs.readFileSync(file.path);
+    const checksum = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+
+    const doc = new ApplicationDocument({
+      applicationId: resolvedAppId,
+      requirementCode: category || 'GENERAL_VAULT',
+      originalFilename: file.originalname,
+      storageKey: file.filename,
+      mimeType: file.mimetype,
+      fileSize: file.size,
+      checksum,
+      verificationStatus: 'PENDING',
+      uploadedBy: userId,
+      uploadedAt: new Date(),
+      reviewerId: null,
+      reviewNotes: ''
+    });
+
+    await doc.save();
+
+    await auditLogRepo.log(userId, 'VAULT_UPLOAD_DOCUMENT', 'APPLICATION_DOCUMENT', doc._id.toString(), {
+      category: category || 'GENERAL_VAULT',
+      filename: file.originalname,
+      fileSize: file.size
+    });
+
+    return doc;
+  }
+
+  async deleteDocument(docId, userId, userRoles = []) {
     const doc = await ApplicationDocument.findById(docId);
     if (!doc) {
       const err = new Error('Document not found.');
       err.statusCode = 404;
+      throw err;
+    }
+
+    const isAdmin = userRoles.includes('ADMIN');
+    if (!isAdmin && doc.uploadedBy !== userId) {
+      const err = new Error('Unauthorized. You can only delete your own documents.');
+      err.statusCode = 403;
+      throw err;
+    }
+
+    if (doc.verificationStatus === 'VERIFIED' && !isAdmin) {
+      const err = new Error('Verified documents cannot be removed as they are part of statutory review.');
+      err.statusCode = 400;
       throw err;
     }
 

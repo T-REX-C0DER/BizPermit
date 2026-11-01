@@ -83,10 +83,34 @@ router.post('/:id/documents', authenticate, upload.single('document'), async (re
   }
 });
 
+// GET /api/applications/documents/my-vault (Owner Document Vault)
+router.get('/documents/my-vault', authenticate, async (req, res, next) => {
+  try {
+    const result = await appService.getMyDocumentVault(req.user.id);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/applications/documents/vault-upload (Direct upload to vault)
+router.post('/documents/vault-upload', authenticate, upload.single('document'), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: { message: 'No file uploaded.' } });
+    }
+    const { category, applicationId } = req.body;
+    const doc = await appService.uploadVaultDocument(req.file, category, applicationId, req.user.id);
+    res.status(201).json({ success: true, data: doc });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/applications/:id/documents
 router.get('/:id/documents', authenticate, async (req, res, next) => {
   try {
-    const docs = await appService.getDocuments(req.params.id);
+    const docs = await appService.getDocuments(req.params.id, req.user);
     res.json({ success: true, data: docs });
   } catch (err) {
     next(err);
@@ -96,7 +120,7 @@ router.get('/:id/documents', authenticate, async (req, res, next) => {
 // DELETE /api/applications/documents/:docId
 router.delete('/documents/:docId', authenticate, async (req, res, next) => {
   try {
-    await appService.deleteDocument(req.params.docId, req.user.id);
+    await appService.deleteDocument(req.params.docId, req.user.id, req.user.roles);
     res.json({ success: true, message: 'Document successfully removed.' });
   } catch (err) {
     next(err);
@@ -155,16 +179,38 @@ router.post('/:id/decision', authenticate, authorizeRoles('OFFICER', 'ADMIN'), a
   }
 });
 
-// GET /api/applications/download/:storageKey (Protected file download)
-router.get('/download/:storageKey', authenticate, (req, res) => {
-  const safeFilename = path.basename(req.params.storageKey);
-  const filePath = path.resolve(uploadDir, safeFilename);
+// GET /api/applications/download/:storageKey (Protected file download with ownership verification)
+router.get('/download/:storageKey', authenticate, async (req, res, next) => {
+  try {
+    const safeFilename = path.basename(req.params.storageKey);
+    const filePath = path.resolve(uploadDir, safeFilename);
 
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ success: false, error: { message: 'File not found on server.' } });
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ success: false, error: { message: 'File not found on server.' } });
+    }
+
+    // Role-based access and ownership check
+    const { ApplicationDocument } = require('../config/mongodb');
+    const doc = await ApplicationDocument.findOne({ storageKey: safeFilename });
+    const isStaffOrAdmin = req.user.roles.some(r => ['OFFICER', 'INSPECTOR', 'ADMIN'].includes(r));
+
+    if (doc) {
+      if (!isStaffOrAdmin && doc.uploadedBy !== req.user.id) {
+        return res.status(403).json({
+          success: false,
+          error: { message: 'Access denied: You are not authorized to view or download this document.' }
+        });
+      }
+      res.setHeader('Content-Type', doc.mimeType || 'application/octet-stream');
+      res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(doc.originalFilename || safeFilename)}"`);
+    } else if (!isStaffOrAdmin) {
+      return res.status(403).json({ success: false, error: { message: 'Access denied.' } });
+    }
+
+    res.sendFile(filePath);
+  } catch (err) {
+    next(err);
   }
-
-  res.sendFile(filePath);
 });
 
 module.exports = router;

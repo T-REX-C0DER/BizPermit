@@ -194,18 +194,227 @@ class Neo4jService {
         }
       });
 
+      if (nodesMap.size > 0) {
+        return {
+          source: 'neo4j',
+          elements: {
+            nodes: Array.from(nodesMap.values()),
+            edges: edgesList
+          }
+        };
+      }
+      throw new Error('Neo4j returned zero graph nodes. Falling back to relational synchronization.');
+    } catch (err) {
+      console.warn('[Neo4j Warning in getFullGraph]:', err.message);
+      // Synchronize full graph from authoritative MySQL tables
+      const mysql = require('../config/mysql');
+      const nodesMap = new Map();
+      const edgesList = [];
+
+      // 1. Business Categories
+      const categories = await mysql.query(
+        `SELECT id, code, name, description FROM business_categories ${categoryFilter ? 'WHERE code = ?' : ''}`,
+        categoryFilter ? [categoryFilter] : []
+      );
+      categories.forEach(c => {
+        const id = `cat_${c.code}`;
+        nodesMap.set(id, {
+          data: {
+            id,
+            label: c.name,
+            code: c.code,
+            category: 'BusinessCategory',
+            description: c.description
+          }
+        });
+      });
+
+      // 2. License Types
+      let licSql = `
+        SELECT lt.id, lt.code, lt.name, lt.fee, lt.validity_months, lt.requires_inspection,
+               lt.department_id, d.name AS department_name, d.code AS department_code,
+               ltc.category_id, bc.code AS category_code
+        FROM license_types lt
+        JOIN departments d ON lt.department_id = d.id
+        LEFT JOIN license_type_categories ltc ON lt.id = ltc.license_type_id
+        LEFT JOIN business_categories bc ON ltc.category_id = bc.id
+      `;
+      if (categoryFilter) {
+        licSql += ' WHERE bc.code = ?';
+      }
+      const licRows = await mysql.query(licSql, categoryFilter ? [categoryFilter] : []);
+
+      licRows.forEach(l => {
+        const licId = `lic_${l.code}`;
+        if (!nodesMap.has(licId)) {
+          nodesMap.set(licId, {
+            data: {
+              id: licId,
+              label: l.name,
+              code: l.code,
+              category: 'LicenseType',
+              fee: parseFloat(l.fee),
+              validityMonths: l.validity_months,
+              requiresInspection: Boolean(l.requires_inspection),
+              department: l.department_name
+            }
+          });
+        }
+
+        // Department node
+        const deptId = `dept_${l.department_code}`;
+        if (!nodesMap.has(deptId)) {
+          nodesMap.set(deptId, {
+            data: {
+              id: deptId,
+              label: l.department_name,
+              code: l.department_code,
+              category: 'Department'
+            }
+          });
+        }
+
+        // HANDLED_BY edge
+        const deptEdgeId = `edge_${licId}_handledby_${deptId}`;
+        if (!edgesList.some(e => e.data.id === deptEdgeId)) {
+          edgesList.push({
+            data: {
+              id: deptEdgeId,
+              source: licId,
+              target: deptId,
+              label: 'HANDLED_BY',
+              type: 'HANDLED_BY'
+            }
+          });
+        }
+
+        // MAY_REQUIRE edge from category
+        if (l.category_code) {
+          const catId = `cat_${l.category_code}`;
+          if (nodesMap.has(catId)) {
+            const catEdgeId = `edge_${catId}_mayrequire_${licId}`;
+            if (!edgesList.some(e => e.data.id === catEdgeId)) {
+              edgesList.push({
+                data: {
+                  id: catEdgeId,
+                  source: catId,
+                  target: licId,
+                  label: 'MAY_REQUIRE',
+                  type: 'MAY_REQUIRE'
+                }
+              });
+            }
+          }
+        }
+      });
+
+      // 3. Document Requirements
+      const reqRows = await mysql.query(`
+        SELECT lr.id, lr.requirement_code, lr.title, lr.document_type, lr.is_mandatory,
+               lt.code AS license_code
+        FROM license_requirements lr
+        JOIN license_types lt ON lr.license_type_id = lt.id
+      `);
+
+      reqRows.forEach(r => {
+        const licId = `lic_${r.license_code}`;
+        if (nodesMap.has(licId)) {
+          // DocumentType Node
+          const docId = `doc_${r.document_type}`;
+          if (!nodesMap.has(docId)) {
+            nodesMap.set(docId, {
+              data: {
+                id: docId,
+                label: r.title,
+                code: r.document_type,
+                category: 'DocumentType'
+              }
+            });
+          }
+
+          // Requirement Node
+          const reqNodeId = `req_${r.requirement_code}`;
+          if (!nodesMap.has(reqNodeId)) {
+            nodesMap.set(reqNodeId, {
+              data: {
+                id: reqNodeId,
+                label: r.title,
+                code: r.requirement_code,
+                category: 'Requirement',
+                isMandatory: Boolean(r.is_mandatory)
+              }
+            });
+          }
+
+          // NEEDS_DOCUMENT edge
+          const docEdgeId = `edge_${licId}_needs_${docId}`;
+          if (!edgesList.some(e => e.data.id === docEdgeId)) {
+            edgesList.push({
+              data: {
+                id: docEdgeId,
+                source: licId,
+                target: docId,
+                label: 'NEEDS_DOCUMENT',
+                type: 'NEEDS_DOCUMENT',
+                isMandatory: Boolean(r.is_mandatory)
+              }
+            });
+          }
+
+          // HAS_REQUIREMENT edge
+          const reqEdgeId = `edge_${licId}_has_${reqNodeId}`;
+          if (!edgesList.some(e => e.data.id === reqEdgeId)) {
+            edgesList.push({
+              data: {
+                id: reqEdgeId,
+                source: licId,
+                target: reqNodeId,
+                label: 'HAS_REQUIREMENT',
+                type: 'HAS_REQUIREMENT'
+              }
+            });
+          }
+        }
+      });
+
+      // 4. Statutory Prerequisites (DEPENDS_ON)
+      // Food permit depends on General Trade License & Fire Safety
+      // Light Industrial depends on General Trade & Fire Safety & Environmental
+      // Clinical Pharmacy depends on General Trade & Fire Safety
+      const dependencies = [
+        { from: 'lic_LIC-FOD-002', to: 'lic_LIC-TRD-001', reason: 'Statutory commercial premise baseline credential' },
+        { from: 'lic_LIC-FOD-002', to: 'lic_LIC-FIR-003', reason: 'Mandatory fire evacuation & kitchen clearance' },
+        { from: 'lic_LIC-IND-004', to: 'lic_LIC-TRD-001', reason: 'Commercial manufacturing registration baseline' },
+        { from: 'lic_LIC-IND-004', to: 'lic_LIC-FIR-003', reason: 'Industrial egress & fire hydrant certification' },
+        { from: 'lic_LIC-IND-004', to: 'lic_LIC-ENV-006', reason: 'Waste effluent and emission compliance' },
+        { from: 'lic_LIC-MED-005', to: 'lic_LIC-TRD-001', reason: 'Registered retail trade baseline' },
+        { from: 'lic_LIC-MED-005', to: 'lic_LIC-FIR-003', reason: 'Clinical facility occupancy & safety certificate' }
+      ];
+
+      dependencies.forEach(dep => {
+        if (nodesMap.has(dep.from) && nodesMap.has(dep.to)) {
+          const depEdgeId = `edge_${dep.from}_depends_${dep.to}`;
+          if (!edgesList.some(e => e.data.id === depEdgeId)) {
+            edgesList.push({
+              data: {
+                id: depEdgeId,
+                source: dep.from,
+                target: dep.to,
+                label: 'DEPENDS_ON',
+                type: 'DEPENDS_ON',
+                reason: dep.reason
+              }
+            });
+          }
+        }
+      });
+
       return {
+        source: 'mysql_fallback',
+        note: 'Neo4j service offline. Knowledge graph synchronized from authoritative MySQL relational schema.',
         elements: {
           nodes: Array.from(nodesMap.values()),
           edges: edgesList
-        }
-      };
-    } catch (err) {
-      console.warn('[Neo4j Warning in getFullGraph]:', err.message);
-      return {
-        elements: {
-          nodes: [],
-          edges: []
         }
       };
     }

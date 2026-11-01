@@ -23,11 +23,11 @@
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem;margin-bottom:1.5rem;">
           <div>
             <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
-              <span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);">Graph DBMS Visualization</span>
+              <span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--color-muted);">Graph DBMS Visualization</span>
               <span class="badge" style="background:#f0fdf4;color:#166534;font-size:0.65rem;border:1px solid #bbf7d0;">Neo4j / Cypher Graph Engine</span>
             </div>
-            <h1 style="font-size:1.875rem;margin-top:0.25rem;">License Dependency Graph</h1>
-            <p style="color:var(--text-secondary);">Interactive network topology exploring cross-department dependencies, prerequisites, and sector requirements.</p>
+            <h1 style="font-size:1.875rem;font-weight:800;font-family:var(--font-heading);margin:0.2rem 0 0;letter-spacing:-0.02em;">License Dependency Graph</h1>
+            <p style="color:var(--color-text-secondary);margin-top:0.3rem;">Interactive network exploring cross-department dependencies, prerequisites, and sector requirements.</p>
           </div>
           <div style="display:flex;gap:0.5rem;">
             <select id="layout-select" class="form-control" style="font-size:0.85rem;padding:0.4rem 0.75rem;" onchange="changeLayout(this.value)">
@@ -41,6 +41,9 @@
             </button>
           </div>
         </div>
+
+        <!-- Data source banner (shown when MySQL fallback is active) -->
+        <div id="graph-source-banner" style="display:none;background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;padding:0.75rem 1.25rem;margin-bottom:1rem;align-items:center;gap:0.6rem;font-size:0.8rem;color:#92400e;font-weight:500;"></div>
 
         <div class="graph-workbench-grid">
           <!-- Graph Canvas -->
@@ -113,11 +116,8 @@
     let currentLayout = 'cose';
 
     async function initPage() {
-      const user = requireAuth('ADMIN');
-      if (!user) return;
-      renderSidebar('license-graph', 'ADMIN');
-      renderTopbar();
-
+      renderSidebar('license-graph', 'admin');
+      renderTopbar('License Dependency Graph');
       initCytoscape();
       await loadGraph();
     }
@@ -247,26 +247,36 @@
 
     async function loadGraph() {
       try {
-        const res = await api.get('/license-types/meta/graph');
+        const res = await API.get('/license-types/meta/graph');
         const graphData = res.data;
+        let source = res.source || (graphData && graphData.source) || 'unknown';
 
         cy.elements().remove();
 
         const nodes = graphData?.elements?.nodes || graphData?.nodes || [];
         const edges = graphData?.elements?.edges || graphData?.edges || [];
 
+        // Show data source banner
+        const banner = document.getElementById('graph-source-banner');
+        if (banner) {
+          if (source === 'mysql_fallback') {
+            banner.style.display = 'flex';
+            banner.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;flex-shrink:0;color:#b45309;">info</span>
+              <span>Neo4j is offline — displaying graph from MySQL fallback data. Start Neo4j to use live graph queries.</span>`;
+          } else {
+            banner.style.display = 'none';
+          }
+        }
+
         if (nodes.length) {
           cy.add(nodes);
-          if (edges.length) {
-            cy.add(edges);
-          }
+          if (edges.length) cy.add(edges);
           runLayout();
         } else {
-          // If empty graph, load sample fallback graph demonstrating 4-way ontology
           loadFallbackGraph();
         }
       } catch (err) {
-        console.warn('Failed to fetch from Neo4j, loading sample visual model', err);
+        console.warn('Failed to fetch graph data, loading fallback demo', err);
         loadFallbackGraph();
       }
     }
@@ -309,10 +319,16 @@
       cy.layout({
         name: currentLayout,
         animate: true,
-        animationDuration: 600,
-        padding: 50,
-        nodeRepulsion: 6500,
-        idealEdgeLength: 100
+        animationDuration: 700,
+        animationEasing: 'ease-out',
+        padding: 60,
+        nodeRepulsion: 8000,
+        idealEdgeLength: 120,
+        nodeOverlap: 20,
+        refresh: 20,
+        fit: true,
+        randomize: false,
+        componentSpacing: 100
       }).run();
     }
 
@@ -331,9 +347,9 @@
       document.getElementById('node-code').textContent = d.code ? `CODE: ${d.code}` : `ID: ${d.id}`;
 
       let propsHtml = '';
-      if (d.fee) propsHtml += `<div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><strong>Fee:</strong> <span>₹${d.fee}</span></div>`;
+      if (d.fee) propsHtml += `<div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><strong>Fee:</strong> <span>${formatINR(d.fee)}</span></div>`;
       if (d.sla) propsHtml += `<div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;"><strong>SLA:</strong> <span>${d.sla} days</span></div>`;
-      if (d.description) propsHtml += `<div style="margin-top:0.5rem;color:var(--text-secondary);font-size:0.8rem;">${d.description}</div>`;
+      if (d.description) propsHtml += `<div style="margin-top:0.5rem;color:var(--color-text-secondary);font-size:0.8rem;">${d.description}</div>`;
       
       document.getElementById('node-props').innerHTML = propsHtml || '<div style="color:var(--text-muted);font-size:0.8rem;">Standard graph entity</div>';
 

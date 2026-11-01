@@ -1,25 +1,112 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Owner Dashboard — BizPermit</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link rel="stylesheet" href="/assets/css/theme.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link rel="stylesheet" href="/assets/css/animations.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link rel="stylesheet" href="/assets/css/global.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link rel="stylesheet" href="/assets/css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/theme.css">
+  <link rel="stylesheet" href="/assets/css/animations.css">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px)  { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .kpi-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: 0 4px 16px rgba(0,107,97,0.12);
+      transform: translateY(-2px);
+    }
+    .kpi-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .kpi-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-family: var(--font-heading);
+      line-height: 1;
+      color: var(--color-text);
+    }
+    .kpi-sub {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dash-bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) { .dash-bottom-grid { grid-template-columns: 1fr; } }
+
+    .welcome-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .welcome-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-primary);
+      margin-bottom: 0.35rem;
+    }
+    .welcome-heading {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      margin: 0;
+    }
+    .welcome-sub {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+    }
+    .welcome-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -30,17 +117,15 @@
       <header id="dashboard-topbar" class="dashboard-topbar"></header>
 
       <main class="dashboard-content">
-        
+
         <!-- Welcome Banner -->
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="welcome-row">
           <div>
-            <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">
-              BUSINESS OWNER CONTROL PORTAL
-            </span>
-            <h1 id="welcome-msg" style="font-size: 2rem; margin-top: 0.25rem;">Welcome back, Operator</h1>
-            <p style="margin-top: 0.25rem;">Manage commercial registries, track municipal certifications, and oversee renewals.</p>
+            <div class="welcome-eyebrow">Business Owner Portal</div>
+            <h1 id="welcome-msg" class="welcome-heading">Welcome back, Operator</h1>
+            <p class="welcome-sub">Manage your business registrations, track municipal licenses, and oversee renewals.</p>
           </div>
-          <div style="display: flex; gap: 10px;">
+          <div class="welcome-actions">
             <a href="/owner/find-license.html" class="btn btn-secondary btn-sm" style="display:flex;align-items:center;gap:6px;">
               <span class="material-symbols-outlined" style="font-size:16px;">hub</span>
               <span>Explore Graph Licenses</span>
@@ -52,44 +137,56 @@
           </div>
         </div>
 
-        <!-- 4-Stat Metric Cards -->
-        <div class="metric-cards-grid" style="margin-bottom: 2.5rem;">
-          
-          <div class="card card-lift" style="padding: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Registered Businesses</span>
-              <span class="material-symbols-outlined" style="color: var(--accent-teal); font-size: 20px;">storefront</span>
-            </div>
-            <div id="stat-biz" style="font-size: 2.25rem; font-weight: 800; font-family: var(--font-heading); line-height: 1;">—</div>
-            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);"><a href="/owner/businesses.html" style="text-decoration: underline;">Manage profiles &rarr;</a></div>
-          </div>
+        <!-- KPI Cards — Clickable -->
+        <div class="kpi-grid">
 
-          <div class="card card-lift" style="padding: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Pending Applications</span>
-              <span class="material-symbols-outlined" style="color: var(--state-warning); font-size: 20px;">pending_actions</span>
+          <a href="/owner/businesses.html" class="kpi-card">
+            <div class="kpi-label">
+              Registered Businesses
+              <span class="material-symbols-outlined" style="color: var(--color-primary); font-size: 20px;">storefront</span>
             </div>
-            <div id="stat-pending" style="font-size: 2.25rem; font-weight: 800; font-family: var(--font-heading); line-height: 1;">—</div>
-            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);"><a href="/owner/applications.html" style="text-decoration: underline;">Track status &rarr;</a></div>
-          </div>
+            <div id="stat-biz" class="kpi-value">—</div>
+            <div class="kpi-sub">
+              <span class="material-symbols-outlined" style="font-size:13px;">arrow_forward</span>
+              Manage profiles
+            </div>
+          </a>
 
-          <div class="card card-lift" style="padding: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Action Required</span>
-              <span class="material-symbols-outlined" style="color: var(--state-error); font-size: 20px;">error_outline</span>
+          <a href="/owner/applications.html?status=pending" class="kpi-card">
+            <div class="kpi-label">
+              Pending Applications
+              <span class="material-symbols-outlined" style="color: var(--color-warning); font-size: 20px;">pending_actions</span>
             </div>
-            <div id="stat-action" style="font-size: 2.25rem; font-weight: 800; font-family: var(--font-heading); line-height: 1;">—</div>
-            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">Corrections flagged by clerk</div>
-          </div>
+            <div id="stat-pending" class="kpi-value">—</div>
+            <div class="kpi-sub">
+              <span class="material-symbols-outlined" style="font-size:13px;">arrow_forward</span>
+              Track status
+            </div>
+          </a>
 
-          <div class="card card-lift" style="padding: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Active Licenses</span>
-              <span class="material-symbols-outlined" style="color: var(--state-success); font-size: 20px;">verified</span>
+          <a href="/owner/applications.html?status=correction" class="kpi-card">
+            <div class="kpi-label">
+              Action Required
+              <span class="material-symbols-outlined" style="color: var(--color-error); font-size: 20px;">error_outline</span>
             </div>
-            <div id="stat-active" style="font-size: 2.25rem; font-weight: 800; font-family: var(--font-heading); line-height: 1;">—</div>
-            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);"><a href="/owner/licenses.html" style="text-decoration: underline;">View certificates &rarr;</a></div>
-          </div>
+            <div id="stat-action" class="kpi-value">—</div>
+            <div class="kpi-sub">
+              <span class="material-symbols-outlined" style="font-size:13px;">arrow_forward</span>
+              View corrections
+            </div>
+          </a>
+
+          <a href="/owner/licenses.html" class="kpi-card">
+            <div class="kpi-label">
+              Active Licenses
+              <span class="material-symbols-outlined" style="color: var(--color-success); font-size: 20px;">verified</span>
+            </div>
+            <div id="stat-active" class="kpi-value">—</div>
+            <div class="kpi-sub">
+              <span class="material-symbols-outlined" style="font-size:13px;">arrow_forward</span>
+              View certificates
+            </div>
+          </a>
 
         </div>
 
@@ -106,7 +203,7 @@
                 <tr>
                   <th>Filing Number</th>
                   <th>Business Entity</th>
-                  <th>License Framework</th>
+                  <th>License Type</th>
                   <th>Status</th>
                   <th>Last Updated</th>
                   <th>Action</th>
@@ -114,27 +211,30 @@
               </thead>
               <tbody id="recent-apps-body">
                 <tr>
-                  <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading activity...</td>
+                  <td colspan="6" style="text-align: center; color: var(--color-muted); padding: 2.5rem;">
+                    <div style="height:16px;background:var(--color-surface-alt);border-radius:4px;width:60%;margin:0 auto 0.5rem;animation:pulse 1.5s ease-in-out infinite;"></div>
+                    <div style="height:16px;background:var(--color-surface-alt);border-radius:4px;width:45%;margin:0 auto;animation:pulse 1.5s ease-in-out infinite;"></div>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Quick Access Guidance -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="dash-bottom-grid">
-          <div class="card" style="border-left: 4px solid #000;">
-            <h4 style="margin-bottom: 0.5rem;">Need to open a new location?</h4>
-            <p style="font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem;">
-              First register your new physical commercial premises in <strong>My Businesses</strong>, then run the license discovery tool to auto-generate requirements.
+        <!-- Quick Access Info Cards -->
+        <div class="dash-bottom-grid">
+          <div class="card" style="border-left: 4px solid var(--color-text);">
+            <h4 style="margin-bottom: 0.5rem; font-weight: 700;">Opening a new location?</h4>
+            <p style="font-size: 0.875rem; line-height: 1.65; margin-bottom: 1.25rem; color: var(--color-text-secondary);">
+              Register your commercial premises under <strong>My Businesses</strong>, then use the license discovery graph to auto-generate compliance requirements.
             </p>
             <a href="/owner/business-form.html" class="btn btn-secondary btn-sm">Add New Business Profile</a>
           </div>
 
-          <div class="card" style="border-left: 4px solid var(--accent-teal);">
-            <h4 style="margin-bottom: 0.5rem;">Verifiable QR Certificates</h4>
-            <p style="font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem;">
-              Approved licenses feature official certificates encoded with public QR codes suitable for physical premises display.
+          <div class="card" style="border-left: 4px solid var(--color-primary);">
+            <h4 style="margin-bottom: 0.5rem; font-weight: 700;">QR-Verified License Certificates</h4>
+            <p style="font-size: 0.875rem; line-height: 1.65; margin-bottom: 1.25rem; color: var(--color-text-secondary);">
+              Approved licenses feature official certificates with scannable QR codes — suitable for physical premises display and verification.
             </p>
             <a href="/owner/licenses.html" class="btn btn-secondary btn-sm">Access Issued Licenses</a>
           </div>
@@ -154,7 +254,7 @@
 
       const user = API.getUser();
       if (user && user.full_name) {
-        document.getElementById('welcome-msg').textContent = `Welcome back, ${user.full_name}`;
+        document.getElementById('welcome-msg').textContent = `Welcome back, ${user.full_name.split(' ')[0]}`;
       }
 
       await loadDashboardData();
@@ -165,29 +265,33 @@
         const res = await API.get('/owner/dashboard');
         if (res.success && res.data) {
           const d = res.data;
-          document.getElementById('stat-biz').textContent = d.totalBusinesses || 0;
-          document.getElementById('stat-pending').textContent = d.applications.pending_count || 0;
-          document.getElementById('stat-action').textContent = d.applications.action_required_count || 0;
-          document.getElementById('stat-active').textContent = d.licenses.active_licenses || 0;
+          animateValue('stat-biz', d.totalBusinesses || 0);
+          animateValue('stat-pending', d.applications.pending_count || 0);
+          animateValue('stat-action', d.applications.action_required_count || 0);
+          animateValue('stat-active', d.licenses.active_licenses || 0);
 
           // Render Recent Apps
           const tbody = document.getElementById('recent-apps-body');
           if (!d.recentApplications || d.recentApplications.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No applications filed yet. <a href="/owner/apply.html">Start your first application</a>.</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 3rem;">
+              <span class="material-symbols-outlined" style="font-size:40px;color:var(--color-muted);display:block;margin-bottom:0.75rem;">assignment</span>
+              <div style="font-weight:600;margin-bottom:0.25rem;">No applications filed yet</div>
+              <div style="font-size:0.85rem;color:var(--color-muted);margin-bottom:1rem;">Start your compliance journey today</div>
+              <a href="/owner/apply.html" class="btn btn-primary btn-sm">Start First Application</a>
+            </td></tr>`;
             return;
           }
 
           tbody.innerHTML = d.recentApplications.map(app => `
             <tr>
-              <td class="tabular-nums" style="font-weight: 700;">${app.application_number}</td>
+              <td class="tabular-nums" style="font-weight: 700; font-size:0.85rem;">${app.application_number}</td>
               <td style="font-weight: 600;">${app.business_name}</td>
-              <td>${app.license_name}</td>
+              <td style="font-size:0.875rem;">${app.license_name}</td>
               <td>${formatStatusBadge(app.status)}</td>
-              <td class="tabular-nums" style="font-size: 0.8rem; color: var(--text-muted);">${formatDate(app.updated_at)}</td>
+              <td class="tabular-nums" style="font-size: 0.8rem; color: var(--color-muted);">${formatDate(app.updated_at)}</td>
               <td>
-                <a href="/owner/application-details.html?id=${app.id}" class="btn btn-secondary btn-sm" style="padding: 4px 10px; font-size: 0.75rem;">
-                  <span>View</span>
-                  <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span>
+                <a href="/owner/application-details.html?id=${app.id}" class="btn btn-secondary btn-sm" style="display:flex;align-items:center;gap:4px;padding:4px 10px;font-size:0.75rem;">
+                  View <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span>
                 </a>
               </td>
             </tr>
@@ -195,8 +299,28 @@
         }
       } catch (err) {
         console.error('Failed to load owner dashboard:', err);
+        document.getElementById('stat-biz').textContent = '0';
+        document.getElementById('stat-pending').textContent = '0';
+        document.getElementById('stat-action').textContent = '0';
+        document.getElementById('stat-active').textContent = '0';
       }
     }
+
+    function animateValue(id, target) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const duration = 800;
+      const start = performance.now();
+      const from = 0;
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(from + (target - from) * eased);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
   </script>
+
 </body>
 </html>
